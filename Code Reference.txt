@@ -1,0 +1,112 @@
+for i = 1:60
+VpRdax = [VpRdax; std(Rdax(round(i*numel(Rdax)./60):round((i+1)*numel(Rdax)./60)))]
+end
+
+Vdax=sqrt(sum((Rdax-AveRdax).^2)./(numel(Rdax)-1))
+
+hdax=hist(fDAX,nbdax).'
+
+nbdax=round(0.05*numel(fDAX))
+
+[test1,hxdax]=hist(fDAX,nbdax)
+
+Ndax= (fDAX - mean(fDAX))/std(fDAX)
+
+pbdax=hdax./sum(hdax)
+
+Rdax= log([fDAX(2:end);0]./fDAX)
+Rdax = Rdax(1:end-1)
+
+V1dax=sqrt(sum((Rdax-(sum(Rdax)./numel(Rdax))).^2)./(numel(Rdax)-1))
+
+VpRdax = std(Rdax(1:round(numel(Rdax)./60)))
+for i = 1:60
+VpRdax = [VpRdax; std(Rdax(round(i*numel(Rdax)./60):round((i+1)*numel(Rdax)./60)))]
+end
+
+(need wdax)
+VwRdax=[] 
+for i =12:277
+VwRdax= [VwRdax;std(Rdax(find(wdax==i)))]
+end
+
+Vnbdax=round(0.05*numel(VwRdax))
+
+Vhxdax
+for i = 1:9
+[Vhdax,Vhxdax]=(hist(VwRdax,Vnbdax)).'
+end
+
+for i = 1:9
+test=[];
+for j = 1:265:(numel(YEAR{i})*265);
+test(j:j+265)=YEAR{i}(((j-1)/265)+1)./265;
+end;
+for j = 1:265;
+YEARX{i}(j)=sum(test((((j-1)*(numel(YEAR{i})))+1):(j*(numel(YEAR{i})))))./(numel(YEAR{i}));
+end;
+end
+
+for j = 1:265:(numel(YEAR{3})*265);
+test(j:j+265)=YEAR{3}(((j-1)/265)+1)./265;
+end;
+
+for i = 1:265
+yxf100(i)=sum(test((((i-1)*1285)+1):(i*1285)))./1285;
+end
+
+figure;
+>> hold on
+>> for i =1:9
+plot(GH{i})
+legend(name(i))
+end
+>> hold off
+>> xline(GenYearBound{1},'-',{'year 2016'})
+xline(GenYearBound{2},'-',{'year 2017'})
+xline(GenYearBound{3},'-',{'year 2018'})
+xline(GenYearBound{4},'-',{'year 2019'})
+xline(GenYearBound{5},'-',{'year 2020'})
+>> legend('fDAX','fDJI','fFTSE100','fMIB','fHangSeng','fKospi','fNikk','fKLSI','fSTI')
+
+
+test=fDJI;
+test(find((Ht{2}<0.48)))=NaN;
+test(find((Ht{2}>0.53)))=NaN;
+figure;
+plot(fDJI);
+hold on;
+plot(test,'Color','r');
+x=find(YEAR{2}~=0);
+for i =1:5;
+xline(x(i));
+end;
+legend('fDJI','0.45 to 0.55 Ht')
+
+
+>> figure;
+subplot(3,1,1)
+plot(fDJI);
+hold on
+plot(test,'Color','r');
+plot(test2,'Color','g');
+plot(test3,'Color','b');
+for i=1:5;
+xline(x(i));
+end;
+legend('fDJI','0.48-0.53','>0.53','<0.48')
+subplot(3,1,2)
+plot(GH{2})
+yline(0.5)
+ylim([0 1])
+for i=1:5;
+xline(x(i));
+end;
+legend('GQV')
+subplot(3,1,3)
+plot(VwRdji)
+xx=find(YEARX{2}~=0);
+for i=1:5;
+xline(xx(i));
+end;
+legend('WeeklyVolatility')
